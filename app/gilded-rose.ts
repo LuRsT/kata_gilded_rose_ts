@@ -18,27 +18,34 @@ export class GildedRose {
     }
 
     updateQuality() {
+        function general_decrement(item) {
+            if (item.quality > 0) {
+                if (item.name != 'Sulfuras, Hand of Ragnaros') {
+                    item.quality = item.quality - 1
+                }
+            }
+        }
+        function check_max_quality(item) {
+            if (item.quality < 50) {
+                item.quality = item.quality + 1
+            }
+        }
+        function decrement_backstage_quality(item) {
+            if (item.sellIn < 11) {
+                check_max_quality(item)
+            }
+            if (item.sellIn < 6) {
+                check_max_quality(item)
+            }
+        }
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                        this.items[i].quality = this.items[i].quality - 1
-                    }
-                }
+                general_decrement(this.items[i])
             } else {
                 if (this.items[i].quality < 50) {
                     this.items[i].quality = this.items[i].quality + 1
                     if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
+                        decrement_backstage_quality(this.items[i])
                     }
                 }
             }
@@ -57,9 +64,7 @@ export class GildedRose {
                         this.items[i].quality = this.items[i].quality - this.items[i].quality
                     }
                 } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
-                    }
+                    check_max_quality(this.items[i])
                 }
             }
         }
